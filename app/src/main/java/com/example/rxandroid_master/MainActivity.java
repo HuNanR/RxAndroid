@@ -3,13 +3,16 @@ package com.example.rxandroid_master;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jakewharton.rxbinding2.view.RxView;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 
 public class MainActivity extends AppCompatActivity {
@@ -30,17 +33,17 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 //
-//        Observable<List<Object>> listObservable = RxView.clicks(tv)
-//                .buffer(1000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread(), 2);
-//        listObservable.subscribe(new Consumer<List<Object>>() {
-//            @Override
-//            public void accept(List<Object> objects) throws Exception {
-//                if (objects.size() == 2) {
-//                    /*响应双击click事件*/
-//                    Toast.makeText(MainActivity.this, "双击我！", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
+        Observable<List<Object>> listObservable = RxView.clicks(tv)
+                .buffer(1000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread(), 2);
+        listObservable.subscribe(new Consumer<List<Object>>() {
+            @Override
+            public void accept(List<Object> objects) throws Exception {
+                if (objects.size() == 2) {
+                    /*响应双击click事件*/
+                    Toast.makeText(MainActivity.this, "双击我！", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         RxView.clicks(tv).throttleFirst(1000, TimeUnit.MILLISECONDS)
                 .subscribe(new Consumer<Object>() {
@@ -55,6 +58,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d("TAG", "onActivityResult() is to be call");
+
     }
 }
